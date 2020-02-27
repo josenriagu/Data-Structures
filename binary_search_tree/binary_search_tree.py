@@ -19,7 +19,6 @@ class BinarySearchTree:
             if self.left is None:
                 # place our new node here
                 self.left = BinarySearchTree(value)
-                return
             # otherwise
             else:
                 # repeat process for the left
@@ -32,11 +31,12 @@ class BinarySearchTree:
             if self.right is None:
                 # place our new node here
                 self.right = BinarySearchTree(value)
-                return
             # otherwise
             else:
                 # repeat the process for the right
                 self.right.insert(value)
+        # return self to allow us chain similar insert operations
+        return self
 
     # Return True if the tree contains the value
     # False if it does not
@@ -81,17 +81,57 @@ class BinarySearchTree:
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self, node):
-        pass
+        if node.left:
+            self.in_order_print(node.left)
+        print(node.value)
+        if node.right:
+            self.in_order_print(node.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        pass
+        # create an empty queue
+        q = Queue()
+        # add the starting node to the queue
+        q.enqueue(self)
+
+        # iterate over the queue
+        while q.len() > 0:
+            # set the current_node to the first item in the q
+            current_node = q.dequeue()
+            # then print the current value
+            print(current_node.value)
+            # if the current node has a left child
+            if current_node.left:
+                # call enqueue on the current left
+                q.enqueue(current_node.left)
+            # if the current node has a right child
+            if current_node.right:
+                # call enqueue on the current right
+                q.enqueue(current_node.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        # create an empty stack
+        s = Stack()
+        # add the starting node to the stack
+        s.push(self)
+
+        # iterate over the stack
+        while s.len() > 0:
+            # set the current_node to the first item in the stack
+            current_node = s.pop()
+            # then print the current value
+            print(current_node.value)
+            # if the current node has a right child
+            if current_node.right:
+                # call push on the current right
+                s.push(current_node.right)
+            # if the current node has a left child
+            if current_node.left:
+                # call push on the current left
+                s.push(current_node.left)
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
@@ -103,3 +143,18 @@ class BinarySearchTree:
     # Print Post-order recursive DFT
     def post_order_dft(self, node):
         pass
+
+
+# playground
+bst = BinarySearchTree(5)
+bst.insert(2).insert(3).insert(7).insert(6).insert(9).insert(8).insert(10)
+#                   5
+#           2               7
+#       3               6       9
+#                            8     10
+
+bst.in_order_print(bst)
+print()
+bst.dft_print(bst)
+print()
+bst.bft_print(bst)
